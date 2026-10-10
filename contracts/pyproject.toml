@@ -1,0 +1,17 @@
+[project]
+name = "stishsits-contracts"
+version = "0.0.1"
+description = "Stish Sits contest escrow (experimental, testnet only)"
+requires-python = ">=3.12"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 120
+target-version = "py312"
+extend-exclude = ["smart_contracts/contest_escrow/artifacts"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP"]
+ignore = ["B011"]

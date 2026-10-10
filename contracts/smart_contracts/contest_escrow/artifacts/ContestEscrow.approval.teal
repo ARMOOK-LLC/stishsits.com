@@ -1,0 +1,1253 @@
+#pragma version 11
+#pragma typetrack false
+
+// algopy.arc4.ARC4Contract.approval_program() -> uint64:
+main:
+    intcblock 0 1 8 32 10000
+    bytecblock "status" "referee" "entrant_count" 0x65 "organizer" "entry_asset" "entry_amount" "result_time" "asset_opted_in" "min_entrants" "join_deadline" "settle_deadline" "challenge_window" "winner" "challenged" "promoter" "venue" "promoter_bps" "venue_bps" "referee_bps" "max_entrants" "result_hash" 0x151f7c75
+    // smart_contracts/contest_escrow/contract.py:43
+    // class ContestEscrow(ARC4Contract):
+    txn OnCompletion
+    !
+    assert
+    txn ApplicationID
+    bz main_create_NoOp@15
+    pushbytess 0x1154dcbb 0xc493978f 0x3774a47d 0x34c6cfa6 0x39b519e8 0xf5f8dc17 0x31f26a9b 0x5e183a91 0xc6bdc701 // method "opt_in_asset(pay)void", method "join(axfer,pay)void", method "lock()void", method "settle(address,byte[])void", method "challenge()void", method "payout()uint64", method "cancel()void", method "refund(address)void", method "entrant_status(address)uint64"
+    txna ApplicationArgs 0
+    match opt_in_asset join lock settle challenge payout cancel refund entrant_status
+    err
+
+main_create_NoOp@15:
+    // smart_contracts/contest_escrow/contract.py:43
+    // class ContestEscrow(ARC4Contract):
+    pushbytes 0x3043eea1 // method "create(uint64,uint64,address,address,address,uint64,uint64,uint64,uint64,uint64,uint64,uint64,uint64)void"
+    txna ApplicationArgs 0
+    match create
+    err
+
+
+// smart_contracts.contest_escrow.contract.ContestEscrow.create[routing]() -> void:
+create:
+    // smart_contracts/contest_escrow/contract.py:68-69
+    // # ------------------------------------------------------------------ create
+    // @arc4.abimethod(create="require")
+    txna ApplicationArgs 1
+    dup
+    len
+    intc_2 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    txna ApplicationArgs 2
+    dup
+    len
+    intc_2 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    dup
+    txna ApplicationArgs 3
+    dup
+    cover 2
+    dup
+    len
+    intc_3 // 32
+    ==
+    assert // invalid number of bytes for arc4.static_array<arc4.uint8, 32>
+    txna ApplicationArgs 4
+    dup
+    cover 3
+    len
+    intc_3 // 32
+    ==
+    assert // invalid number of bytes for arc4.static_array<arc4.uint8, 32>
+    txna ApplicationArgs 5
+    dup
+    cover 3
+    len
+    intc_3 // 32
+    ==
+    assert // invalid number of bytes for arc4.static_array<arc4.uint8, 32>
+    txna ApplicationArgs 6
+    dup
+    len
+    intc_2 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    dup
+    cover 5
+    txna ApplicationArgs 7
+    dup
+    len
+    intc_2 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    dup
+    cover 4
+    txna ApplicationArgs 8
+    dup
+    len
+    intc_2 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    dup
+    cover 8
+    txna ApplicationArgs 9
+    dup
+    len
+    intc_2 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    dup
+    cover 9
+    txna ApplicationArgs 10
+    dup
+    len
+    intc_2 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    dup
+    cover 10
+    txna ApplicationArgs 11
+    dup
+    len
+    intc_2 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    dup
+    cover 11
+    txna ApplicationArgs 12
+    dup
+    len
+    intc_2 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    dup
+    cover 12
+    txna ApplicationArgs 13
+    dup
+    len
+    intc_2 // 8
+    ==
+    assert // invalid number of bytes for arc4.uint64
+    btoi
+    cover 12
+    // smart_contracts/contest_escrow/contract.py:87
+    // assert entry_amount > 0, "entry must be positive"
+    uncover 8
+    assert // entry must be positive
+    // smart_contracts/contest_escrow/contract.py:88
+    // assert referee != Global.zero_address, "referee required"
+    global ZeroAddress
+    uncover 8
+    !=
+    assert // referee required
+    // smart_contracts/contest_escrow/contract.py:89
+    // assert promoter_bps + venue_bps + referee_bps <= MAX_TOTAL_CUT_BPS, "cuts too high"
+    dig 6
+    uncover 6
+    +
+    uncover 5
+    +
+    pushint 3000
+    <=
+    assert // cuts too high
+    // smart_contracts/contest_escrow/contract.py:90
+    // assert min_entrants >= MIN_FIELD, "min field is 2"
+    dig 3
+    pushint 2
+    >=
+    assert // min field is 2
+    // smart_contracts/contest_escrow/contract.py:91
+    // assert max_entrants >= min_entrants, "max < min"
+    uncover 2
+    uncover 3
+    >=
+    assert // max < min
+    // smart_contracts/contest_escrow/contract.py:92
+    // assert join_deadline > Global.latest_timestamp, "join deadline in the past"
+    dig 1
+    global LatestTimestamp
+    >
+    assert // join deadline in the past
+    // smart_contracts/contest_escrow/contract.py:93
+    // assert settle_deadline > join_deadline, "settle deadline must follow join deadline"
+    <
+    assert // settle deadline must follow join deadline
+    // smart_contracts/contest_escrow/contract.py:94
+    // if promoter_bps > 0:
+    bz create_after_if_else@3
+    // smart_contracts/contest_escrow/contract.py:95
+    // assert promoter != Global.zero_address, "promoter required for a promoter cut"
+    dig 2
+    global ZeroAddress
+    !=
+    assert // promoter required for a promoter cut
+
+create_after_if_else@3:
+    // smart_contracts/contest_escrow/contract.py:96
+    // if venue_bps > 0:
+    dup
+    bz create_after_if_else@5
+    // smart_contracts/contest_escrow/contract.py:97
+    // assert venue != Global.zero_address, "venue required for a venue cut"
+    dig 1
+    global ZeroAddress
+    !=
+    assert // venue required for a venue cut
+
+create_after_if_else@5:
+    // smart_contracts/contest_escrow/contract.py:99
+    // self.organizer.value = Txn.sender
+    bytec 4 // "organizer"
+    txn Sender
+    app_global_put
+    // smart_contracts/contest_escrow/contract.py:100
+    // self.entry_asset.value = entry_asset
+    bytec 5 // "entry_asset"
+    uncover 13
+    app_global_put
+    // smart_contracts/contest_escrow/contract.py:101
+    // self.entry_amount.value = entry_amount
+    bytec 6 // "entry_amount"
+    uncover 12
+    app_global_put
+    // smart_contracts/contest_escrow/contract.py:102
+    // self.referee.value = referee
+    bytec_1 // "referee"
+    uncover 11
+    app_global_put
+    // smart_contracts/contest_escrow/contract.py:103
+    // self.promoter.value = promoter
+    bytec 15 // "promoter"
+    uncover 3
+    app_global_put
+    // smart_contracts/contest_escrow/contract.py:104
+    // self.venue.value = venue
+    bytec 16 // "venue"
+    uncover 2
+    app_global_put
+    // smart_contracts/contest_escrow/contract.py:105
+    // self.promoter_bps.value = promoter_bps
+    bytec 17 // "promoter_bps"
+    uncover 8
+    app_global_put
+    // smart_contracts/contest_escrow/contract.py:106
+    // self.venue_bps.value = venue_bps
+    bytec 18 // "venue_bps"
+    swap
+    app_global_put
+    // smart_contracts/contest_escrow/contract.py:107
+    // self.referee_bps.value = referee_bps
+    bytec 19 // "referee_bps"
+    uncover 6
+    app_global_put
+    // smart_contracts/contest_escrow/contract.py:108
+    // self.min_entrants.value = min_entrants
+    bytec 9 // "min_entrants"
+    uncover 5
+    app_global_put
+    // smart_contracts/contest_escrow/contract.py:109
+    // self.max_entrants.value = max_entrants
+    bytec 20 // "max_entrants"
+    uncover 4
+    app_global_put
+    // smart_contracts/contest_escrow/contract.py:110
+    // self.join_deadline.value = join_deadline
+    bytec 10 // "join_deadline"
+    uncover 3
+    app_global_put
+    // smart_contracts/contest_escrow/contract.py:111
+    // self.settle_deadline.value = settle_deadline
+    bytec 11 // "settle_deadline"
+    uncover 2
+    app_global_put
+    // smart_contracts/contest_escrow/contract.py:112
+    // self.challenge_window.value = challenge_window
+    bytec 12 // "challenge_window"
+    swap
+    app_global_put
+    // smart_contracts/contest_escrow/contract.py:113
+    // self.status.value = UInt64(OPEN)
+    bytec_0 // "status"
+    intc_0 // 0
+    app_global_put
+    // smart_contracts/contest_escrow/contract.py:114
+    // self.entrant_count.value = UInt64(0)
+    bytec_2 // "entrant_count"
+    intc_0 // 0
+    app_global_put
+    // smart_contracts/contest_escrow/contract.py:115
+    // self.winner.value = Global.zero_address
+    bytec 13 // "winner"
+    global ZeroAddress
+    app_global_put
+    // smart_contracts/contest_escrow/contract.py:116
+    // self.result_hash.value = Bytes()
+    bytec 21 // "result_hash"
+    pushbytes 0x
+    app_global_put
+    // smart_contracts/contest_escrow/contract.py:117
+    // self.result_time.value = UInt64(0)
+    bytec 7 // "result_time"
+    intc_0 // 0
+    app_global_put
+    // smart_contracts/contest_escrow/contract.py:118
+    // self.challenged.value = UInt64(0)
+    bytec 14 // "challenged"
+    intc_0 // 0
+    app_global_put
+    // smart_contracts/contest_escrow/contract.py:119
+    // self.asset_opted_in.value = UInt64(0)
+    bytec 8 // "asset_opted_in"
+    intc_0 // 0
+    app_global_put
+    // smart_contracts/contest_escrow/contract.py:68-69
+    // # ------------------------------------------------------------------ create
+    // @arc4.abimethod(create="require")
+    intc_1 // 1
+    return
+
+
+// smart_contracts.contest_escrow.contract.ContestEscrow.opt_in_asset[routing]() -> void:
+opt_in_asset:
+    // smart_contracts/contest_escrow/contract.py:121-122
+    // # ------------------------------------------------------------- opt in ASA
+    // @arc4.abimethod
+    txn GroupIndex
+    intc_1 // 1
+    -
+    dup
+    gtxns TypeEnum
+    intc_1 // pay
+    ==
+    assert // transaction type is pay
+    // smart_contracts/contest_escrow/contract.py:125
+    // assert Txn.sender == self.organizer.value, "organizer only"
+    txn Sender
+    intc_0 // 0
+    bytec 4 // "organizer"
+    app_global_get_ex
+    assert // check self.organizer exists
+    ==
+    assert // organizer only
+    // smart_contracts/contest_escrow/contract.py:126
+    // assert self.status.value == OPEN, "not open"
+    intc_0 // 0
+    bytec_0 // "status"
+    app_global_get_ex
+    assert // check self.status exists
+    !
+    assert // not open
+    // smart_contracts/contest_escrow/contract.py:127
+    // assert self.asset_opted_in.value == 0, "already opted in"
+    intc_0 // 0
+    bytec 8 // "asset_opted_in"
+    app_global_get_ex
+    assert // check self.asset_opted_in exists
+    !
+    assert // already opted in
+    // smart_contracts/contest_escrow/contract.py:128
+    // assert mbr_payment.receiver == Global.current_application_address, "pay the app"
+    dup
+    gtxns Receiver
+    global CurrentApplicationAddress
+    ==
+    assert // pay the app
+    // smart_contracts/contest_escrow/contract.py:129
+    // assert mbr_payment.amount >= Global.min_balance + Global.asset_opt_in_min_balance, "fund MBR"
+    dup
+    gtxns Amount
+    global MinBalance
+    global AssetOptInMinBalance
+    +
+    >=
+    assert // fund MBR
+    // smart_contracts/contest_escrow/contract.py:130
+    // assert mbr_payment.rekey_to == Global.zero_address, "no rekey"
+    dup
+    gtxns RekeyTo
+    global ZeroAddress
+    ==
+    assert // no rekey
+    // smart_contracts/contest_escrow/contract.py:131
+    // assert mbr_payment.close_remainder_to == Global.zero_address, "no close"
+    gtxns CloseRemainderTo
+    global ZeroAddress
+    ==
+    assert // no close
+    // smart_contracts/contest_escrow/contract.py:132-137
+    // itxn.AssetTransfer(
+    //     xfer_asset=self.entry_asset.value,
+    //     asset_receiver=Global.current_application_address,
+    //     asset_amount=0,
+    //     fee=0,
+    // ).submit()
+    itxn_begin
+    // smart_contracts/contest_escrow/contract.py:133
+    // xfer_asset=self.entry_asset.value,
+    intc_0 // 0
+    bytec 5 // "entry_asset"
+    app_global_get_ex
+    assert // check self.entry_asset exists
+    // smart_contracts/contest_escrow/contract.py:134
+    // asset_receiver=Global.current_application_address,
+    global CurrentApplicationAddress
+    // smart_contracts/contest_escrow/contract.py:135
+    // asset_amount=0,
+    intc_0 // 0
+    itxn_field AssetAmount
+    itxn_field AssetReceiver
+    itxn_field XferAsset
+    // smart_contracts/contest_escrow/contract.py:132
+    // itxn.AssetTransfer(
+    pushint 4 // axfer
+    itxn_field TypeEnum
+    // smart_contracts/contest_escrow/contract.py:136
+    // fee=0,
+    intc_0 // 0
+    itxn_field Fee
+    // smart_contracts/contest_escrow/contract.py:132-137
+    // itxn.AssetTransfer(
+    //     xfer_asset=self.entry_asset.value,
+    //     asset_receiver=Global.current_application_address,
+    //     asset_amount=0,
+    //     fee=0,
+    // ).submit()
+    itxn_submit
+    // smart_contracts/contest_escrow/contract.py:138
+    // self.asset_opted_in.value = UInt64(1)
+    bytec 8 // "asset_opted_in"
+    intc_1 // 1
+    app_global_put
+    // smart_contracts/contest_escrow/contract.py:121-122
+    // # ------------------------------------------------------------- opt in ASA
+    // @arc4.abimethod
+    intc_1 // 1
+    return
+
+
+// smart_contracts.contest_escrow.contract.ContestEscrow.join[routing]() -> void:
+join:
+    // smart_contracts/contest_escrow/contract.py:140-141
+    // # -------------------------------------------------------------------- join
+    // @arc4.abimethod
+    txn GroupIndex
+    pushint 2
+    -
+    dup
+    gtxns TypeEnum
+    pushint 4 // axfer
+    ==
+    assert // transaction type is axfer
+    txn GroupIndex
+    intc_1 // 1
+    -
+    dup
+    gtxns TypeEnum
+    intc_1 // pay
+    ==
+    assert // transaction type is pay
+    // smart_contracts/contest_escrow/contract.py:144
+    // assert self.status.value == OPEN, "not open"
+    intc_0 // 0
+    bytec_0 // "status"
+    app_global_get_ex
+    assert // check self.status exists
+    !
+    assert // not open
+    // smart_contracts/contest_escrow/contract.py:145
+    // assert self.asset_opted_in.value == 1, "app not opted in"
+    intc_0 // 0
+    bytec 8 // "asset_opted_in"
+    app_global_get_ex
+    assert // check self.asset_opted_in exists
+    intc_1 // 1
+    ==
+    assert // app not opted in
+    // smart_contracts/contest_escrow/contract.py:146
+    // assert Global.latest_timestamp < self.join_deadline.value, "entry closed"
+    global LatestTimestamp
+    intc_0 // 0
+    bytec 10 // "join_deadline"
+    app_global_get_ex
+    assert // check self.join_deadline exists
+    <
+    assert // entry closed
+    // smart_contracts/contest_escrow/contract.py:147
+    // assert Txn.sender != self.referee.value, "referee may not enter"
+    txn Sender
+    intc_0 // 0
+    bytec_1 // "referee"
+    app_global_get_ex
+    assert // check self.referee exists
+    !=
+    assert // referee may not enter
+    // smart_contracts/contest_escrow/contract.py:148
+    // assert Txn.sender not in self.entrants, "already entered"
+    bytec_3 // 0x65
+    txn Sender
+    concat
+    box_len
+    bury 1
+    !
+    assert // already entered
+    // smart_contracts/contest_escrow/contract.py:149
+    // assert self.entrant_count.value < self.max_entrants.value, "field full"
+    intc_0 // 0
+    bytec_2 // "entrant_count"
+    app_global_get_ex
+    assert // check self.entrant_count exists
+    intc_0 // 0
+    bytec 20 // "max_entrants"
+    app_global_get_ex
+    assert // check self.max_entrants exists
+    dig 1
+    >
+    assert // field full
+    // smart_contracts/contest_escrow/contract.py:151
+    // assert entry.sender == Txn.sender, "entrant must pay own entry"
+    dig 2
+    gtxns Sender
+    txn Sender
+    ==
+    assert // entrant must pay own entry
+    // smart_contracts/contest_escrow/contract.py:152
+    // assert entry.xfer_asset == self.entry_asset.value, "wrong asset"
+    dig 2
+    gtxns XferAsset
+    intc_0 // 0
+    bytec 5 // "entry_asset"
+    app_global_get_ex
+    assert // check self.entry_asset exists
+    ==
+    assert // wrong asset
+    // smart_contracts/contest_escrow/contract.py:153
+    // assert entry.asset_receiver == Global.current_application_address, "pay the app"
+    dig 2
+    gtxns AssetReceiver
+    global CurrentApplicationAddress
+    ==
+    assert // pay the app
+    // smart_contracts/contest_escrow/contract.py:154
+    // assert entry.asset_amount == self.entry_amount.value, "wrong amount"
+    dig 2
+    gtxns AssetAmount
+    intc_0 // 0
+    bytec 6 // "entry_amount"
+    app_global_get_ex
+    assert // check self.entry_amount exists
+    ==
+    assert // wrong amount
+    // smart_contracts/contest_escrow/contract.py:155
+    // assert entry.asset_sender == Global.zero_address, "no clawback transfers"
+    dig 2
+    gtxns AssetSender
+    global ZeroAddress
+    ==
+    assert // no clawback transfers
+    // smart_contracts/contest_escrow/contract.py:156
+    // assert entry.asset_close_to == Global.zero_address, "no close"
+    dig 2
+    gtxns AssetCloseTo
+    global ZeroAddress
+    ==
+    assert // no close
+    // smart_contracts/contest_escrow/contract.py:157
+    // assert entry.rekey_to == Global.zero_address, "no rekey"
+    uncover 2
+    gtxns RekeyTo
+    global ZeroAddress
+    ==
+    assert // no rekey
+    // smart_contracts/contest_escrow/contract.py:159
+    // assert box_mbr.sender == Txn.sender, "entrant funds own box"
+    dig 1
+    gtxns Sender
+    txn Sender
+    ==
+    assert // entrant funds own box
+    // smart_contracts/contest_escrow/contract.py:160
+    // assert box_mbr.receiver == Global.current_application_address, "pay the app"
+    dig 1
+    gtxns Receiver
+    global CurrentApplicationAddress
+    ==
+    assert // pay the app
+    // smart_contracts/contest_escrow/contract.py:161
+    // assert box_mbr.amount >= entrant_box_mbr(), "box MBR too low"
+    dig 1
+    gtxns Amount
+    // smart_contracts/contest_escrow/contract.py:271-272
+    // # 2500 + 400 * (key bytes + value bytes); key = 1 prefix + 32 address, value = 8
+    // return UInt64(2_500 + 400 * (1 + 32 + 8))
+    pushint 18900
+    // smart_contracts/contest_escrow/contract.py:161
+    // assert box_mbr.amount >= entrant_box_mbr(), "box MBR too low"
+    >=
+    assert // box MBR too low
+    // smart_contracts/contest_escrow/contract.py:162
+    // assert box_mbr.rekey_to == Global.zero_address, "no rekey"
+    dig 1
+    gtxns RekeyTo
+    global ZeroAddress
+    ==
+    assert // no rekey
+    // smart_contracts/contest_escrow/contract.py:163
+    // assert box_mbr.close_remainder_to == Global.zero_address, "no close"
+    swap
+    gtxns CloseRemainderTo
+    global ZeroAddress
+    ==
+    assert // no close
+    // smart_contracts/contest_escrow/contract.py:165
+    // self.entrants[Txn.sender] = UInt64(PAID_IN)
+    bytec_3 // 0x65
+    txn Sender
+    concat
+    intc_1 // 1
+    itob
+    box_put
+    // smart_contracts/contest_escrow/contract.py:166
+    // self.entrant_count.value += 1
+    intc_1 // 1
+    +
+    bytec_2 // "entrant_count"
+    swap
+    app_global_put
+    // smart_contracts/contest_escrow/contract.py:140-141
+    // # -------------------------------------------------------------------- join
+    // @arc4.abimethod
+    intc_1 // 1
+    return
+
+
+// smart_contracts.contest_escrow.contract.ContestEscrow.lock[routing]() -> void:
+lock:
+    // smart_contracts/contest_escrow/contract.py:172
+    // assert Txn.sender == self.referee.value or Txn.sender == self.organizer.value, "not allowed"
+    txn Sender
+    intc_0 // 0
+    bytec_1 // "referee"
+    app_global_get_ex
+    assert // check self.referee exists
+    ==
+    bnz lock_bool_true@3
+    txn Sender
+    intc_0 // 0
+    bytec 4 // "organizer"
+    app_global_get_ex
+    assert // check self.organizer exists
+    ==
+    bz lock_bool_false@4
+
+lock_bool_true@3:
+    intc_1 // 1
+
+lock_bool_merge@5:
+    // smart_contracts/contest_escrow/contract.py:172
+    // assert Txn.sender == self.referee.value or Txn.sender == self.organizer.value, "not allowed"
+    assert // not allowed
+    // smart_contracts/contest_escrow/contract.py:173
+    // assert self.status.value == OPEN, "not open"
+    intc_0 // 0
+    bytec_0 // "status"
+    app_global_get_ex
+    assert // check self.status exists
+    !
+    assert // not open
+    // smart_contracts/contest_escrow/contract.py:174
+    // assert self.entrant_count.value >= self.min_entrants.value, "field too small; cancel instead"
+    intc_0 // 0
+    bytec_2 // "entrant_count"
+    app_global_get_ex
+    assert // check self.entrant_count exists
+    intc_0 // 0
+    bytec 9 // "min_entrants"
+    app_global_get_ex
+    assert // check self.min_entrants exists
+    >=
+    assert // field too small; cancel instead
+    // smart_contracts/contest_escrow/contract.py:175
+    // self.status.value = UInt64(LOCKED)
+    bytec_0 // "status"
+    intc_1 // 1
+    app_global_put
+    // smart_contracts/contest_escrow/contract.py:168-169
+    // # -------------------------------------------------------------------- lock
+    // @arc4.abimethod
+    intc_1 // 1
+    return
+
+lock_bool_false@4:
+    intc_0 // 0
+    b lock_bool_merge@5
+
+
+// smart_contracts.contest_escrow.contract.ContestEscrow.settle[routing]() -> void:
+settle:
+    // smart_contracts/contest_escrow/contract.py:177-178
+    // # ------------------------------------------------------------------ settle
+    // @arc4.abimethod
+    txna ApplicationArgs 1
+    dup
+    len
+    intc_3 // 32
+    ==
+    assert // invalid number of bytes for arc4.static_array<arc4.uint8, 32>
+    txna ApplicationArgs 2
+    dup
+    intc_0 // 0
+    extract_uint16 // on error: invalid array length header
+    pushint 2
+    +
+    dig 1
+    len
+    ==
+    assert // invalid number of bytes for arc4.dynamic_array<arc4.uint8>
+    extract 2 0
+    // smart_contracts/contest_escrow/contract.py:181
+    // assert Txn.sender == self.referee.value, "referee only"
+    txn Sender
+    intc_0 // 0
+    bytec_1 // "referee"
+    app_global_get_ex
+    assert // check self.referee exists
+    ==
+    assert // referee only
+    // smart_contracts/contest_escrow/contract.py:182
+    // assert self.status.value == LOCKED, "not locked"
+    intc_0 // 0
+    bytec_0 // "status"
+    app_global_get_ex
+    assert // check self.status exists
+    intc_1 // 1
+    ==
+    assert // not locked
+    // smart_contracts/contest_escrow/contract.py:183
+    // assert Global.latest_timestamp <= self.settle_deadline.value, "past settle deadline"
+    global LatestTimestamp
+    intc_0 // 0
+    bytec 11 // "settle_deadline"
+    app_global_get_ex
+    assert // check self.settle_deadline exists
+    <=
+    assert // past settle deadline
+    // smart_contracts/contest_escrow/contract.py:184
+    // assert winner in self.entrants, "winner must be an entrant"
+    bytec_3 // 0x65
+    dig 2
+    concat
+    dup
+    box_len
+    bury 1
+    assert // winner must be an entrant
+    // smart_contracts/contest_escrow/contract.py:185
+    // assert self.entrants[winner] == PAID_IN, "winner not paid in"
+    box_get
+    pop
+    btoi
+    intc_1 // 1
+    ==
+    assert // winner not paid in
+    // smart_contracts/contest_escrow/contract.py:186
+    // assert result_hash.length == 32, "result hash must be 32 bytes (sha256 of the result log)"
+    dup
+    len
+    intc_3 // 32
+    ==
+    assert // result hash must be 32 bytes (sha256 of the result log)
+    // smart_contracts/contest_escrow/contract.py:187
+    // self.winner.value = winner
+    bytec 13 // "winner"
+    uncover 2
+    app_global_put
+    // smart_contracts/contest_escrow/contract.py:188
+    // self.result_hash.value = result_hash
+    bytec 21 // "result_hash"
+    swap
+    app_global_put
+    // smart_contracts/contest_escrow/contract.py:189
+    // self.result_time.value = Global.latest_timestamp
+    bytec 7 // "result_time"
+    global LatestTimestamp
+    app_global_put
+    // smart_contracts/contest_escrow/contract.py:190
+    // self.status.value = UInt64(SETTLED)
+    bytec_0 // "status"
+    pushint 2
+    app_global_put
+    // smart_contracts/contest_escrow/contract.py:177-178
+    // # ------------------------------------------------------------------ settle
+    // @arc4.abimethod
+    intc_1 // 1
+    return
+
+
+// smart_contracts.contest_escrow.contract.ContestEscrow.challenge[routing]() -> void:
+challenge:
+    // smart_contracts/contest_escrow/contract.py:198
+    // assert self.status.value == SETTLED, "nothing to challenge"
+    intc_0 // 0
+    bytec_0 // "status"
+    app_global_get_ex
+    assert // check self.status exists
+    pushint 2
+    ==
+    assert // nothing to challenge
+    // smart_contracts/contest_escrow/contract.py:199
+    // assert Txn.sender in self.entrants, "entrants only"
+    bytec_3 // 0x65
+    txn Sender
+    concat
+    box_len
+    bury 1
+    assert // entrants only
+    // smart_contracts/contest_escrow/contract.py:200
+    // assert Global.latest_timestamp < self.result_time.value + self.challenge_window.value, "window closed"
+    global LatestTimestamp
+    intc_0 // 0
+    bytec 7 // "result_time"
+    app_global_get_ex
+    assert // check self.result_time exists
+    intc_0 // 0
+    bytec 12 // "challenge_window"
+    app_global_get_ex
+    assert // check self.challenge_window exists
+    +
+    <
+    assert // window closed
+    // smart_contracts/contest_escrow/contract.py:201
+    // self.challenged.value = UInt64(1)
+    bytec 14 // "challenged"
+    intc_1 // 1
+    app_global_put
+    // smart_contracts/contest_escrow/contract.py:192-193
+    // # --------------------------------------------------------------- challenge
+    // @arc4.abimethod
+    intc_1 // 1
+    return
+
+
+// smart_contracts.contest_escrow.contract.ContestEscrow.payout[routing]() -> void:
+payout:
+    // smart_contracts/contest_escrow/contract.py:208
+    // assert self.status.value == SETTLED, "not settled"
+    intc_0 // 0
+    bytec_0 // "status"
+    app_global_get_ex
+    assert // check self.status exists
+    pushint 2
+    ==
+    assert // not settled
+    // smart_contracts/contest_escrow/contract.py:209
+    // assert self.challenged.value == 0, "challenged; under review"
+    intc_0 // 0
+    bytec 14 // "challenged"
+    app_global_get_ex
+    assert // check self.challenged exists
+    !
+    assert // challenged; under review
+    // smart_contracts/contest_escrow/contract.py:210
+    // assert Global.latest_timestamp >= self.result_time.value + self.challenge_window.value, "window open"
+    global LatestTimestamp
+    intc_0 // 0
+    bytec 7 // "result_time"
+    app_global_get_ex
+    assert // check self.result_time exists
+    intc_0 // 0
+    bytec 12 // "challenge_window"
+    app_global_get_ex
+    assert // check self.challenge_window exists
+    +
+    >=
+    assert // window open
+    // smart_contracts/contest_escrow/contract.py:212
+    // gross = self.entry_amount.value * self.entrant_count.value
+    intc_0 // 0
+    bytec 6 // "entry_amount"
+    app_global_get_ex
+    assert // check self.entry_amount exists
+    intc_0 // 0
+    bytec_2 // "entrant_count"
+    app_global_get_ex
+    assert // check self.entrant_count exists
+    *
+    // smart_contracts/contest_escrow/contract.py:213
+    // promoter_cut = gross * self.promoter_bps.value // BPS
+    intc_0 // 0
+    bytec 17 // "promoter_bps"
+    app_global_get_ex
+    assert // check self.promoter_bps exists
+    dig 1
+    *
+    intc 4 // 10000
+    /
+    // smart_contracts/contest_escrow/contract.py:214
+    // venue_cut = gross * self.venue_bps.value // BPS
+    intc_0 // 0
+    bytec 18 // "venue_bps"
+    app_global_get_ex
+    assert // check self.venue_bps exists
+    dig 2
+    *
+    intc 4 // 10000
+    /
+    // smart_contracts/contest_escrow/contract.py:215
+    // referee_cut = gross * self.referee_bps.value // BPS
+    intc_0 // 0
+    bytec 19 // "referee_bps"
+    app_global_get_ex
+    assert // check self.referee_bps exists
+    dig 3
+    *
+    intc 4 // 10000
+    /
+    // smart_contracts/contest_escrow/contract.py:216
+    // purse = gross - promoter_cut - venue_cut - referee_cut  # rounding remainder goes to 1st
+    uncover 3
+    dig 3
+    -
+    dig 2
+    -
+    dig 1
+    -
+    // smart_contracts/contest_escrow/contract.py:218
+    // self.status.value = UInt64(PAID)
+    bytec_0 // "status"
+    pushint 3
+    app_global_put
+    // smart_contracts/contest_escrow/contract.py:219
+    // self._send(self.promoter.value, promoter_cut)
+    intc_0 // 0
+    bytec 15 // "promoter"
+    app_global_get_ex
+    assert // check self.promoter exists
+    uncover 4
+    callsub _send
+    // smart_contracts/contest_escrow/contract.py:220
+    // self._send(self.venue.value, venue_cut)
+    intc_0 // 0
+    bytec 16 // "venue"
+    app_global_get_ex
+    assert // check self.venue exists
+    uncover 3
+    callsub _send
+    // smart_contracts/contest_escrow/contract.py:221
+    // self._send(self.referee.value, referee_cut)
+    intc_0 // 0
+    bytec_1 // "referee"
+    app_global_get_ex
+    assert // check self.referee exists
+    uncover 2
+    callsub _send
+    // smart_contracts/contest_escrow/contract.py:222
+    // self._send(self.winner.value, purse)
+    intc_0 // 0
+    bytec 13 // "winner"
+    app_global_get_ex
+    assert // check self.winner exists
+    dig 1
+    callsub _send
+    // smart_contracts/contest_escrow/contract.py:203-204
+    // # ------------------------------------------------------------------ payout
+    // @arc4.abimethod
+    itob
+    bytec 22 // 0x151f7c75
+    swap
+    concat
+    log
+    intc_1 // 1
+    return
+
+
+// smart_contracts.contest_escrow.contract.ContestEscrow.cancel[routing]() -> void:
+cancel:
+    pushbytes ""
+    dup
+    // smart_contracts/contest_escrow/contract.py:232
+    // assert self.status.value != PAID and self.status.value != CANCELED, "already final"
+    intc_0 // 0
+    bytec_0 // "status"
+    app_global_get_ex
+    assert // check self.status exists
+    pushint 3
+    !=
+    bz cancel_bool_false@4
+    intc_0 // 0
+    bytec_0 // "status"
+    app_global_get_ex
+    assert // check self.status exists
+    pushint 4
+    !=
+    bz cancel_bool_false@4
+    intc_1 // 1
+
+cancel_bool_merge@5:
+    // smart_contracts/contest_escrow/contract.py:232
+    // assert self.status.value != PAID and self.status.value != CANCELED, "already final"
+    assert // already final
+    // smart_contracts/contest_escrow/contract.py:233
+    // privileged = Txn.sender == self.organizer.value or Txn.sender == self.referee.value
+    txn Sender
+    intc_0 // 0
+    bytec 4 // "organizer"
+    app_global_get_ex
+    assert // check self.organizer exists
+    ==
+    bnz cancel_bool_true@7
+    txn Sender
+    intc_0 // 0
+    bytec_1 // "referee"
+    app_global_get_ex
+    assert // check self.referee exists
+    ==
+    bz cancel_bool_false@8
+
+cancel_bool_true@7:
+    intc_1 // 1
+
+cancel_bool_merge@9:
+    // smart_contracts/contest_escrow/contract.py:235
+    // self.status.value == OPEN
+    intc_0 // 0
+    bytec_0 // "status"
+    app_global_get_ex
+    assert // check self.status exists
+    // smart_contracts/contest_escrow/contract.py:235-237
+    // self.status.value == OPEN
+    // and Global.latest_timestamp >= self.join_deadline.value
+    // and self.entrant_count.value < self.min_entrants.value
+    bnz cancel_bool_false@13
+    // smart_contracts/contest_escrow/contract.py:236
+    // and Global.latest_timestamp >= self.join_deadline.value
+    global LatestTimestamp
+    intc_0 // 0
+    bytec 10 // "join_deadline"
+    app_global_get_ex
+    assert // check self.join_deadline exists
+    >=
+    // smart_contracts/contest_escrow/contract.py:235-237
+    // self.status.value == OPEN
+    // and Global.latest_timestamp >= self.join_deadline.value
+    // and self.entrant_count.value < self.min_entrants.value
+    bz cancel_bool_false@13
+    // smart_contracts/contest_escrow/contract.py:237
+    // and self.entrant_count.value < self.min_entrants.value
+    intc_0 // 0
+    bytec_2 // "entrant_count"
+    app_global_get_ex
+    assert // check self.entrant_count exists
+    intc_0 // 0
+    bytec 9 // "min_entrants"
+    app_global_get_ex
+    assert // check self.min_entrants exists
+    <
+    // smart_contracts/contest_escrow/contract.py:235-237
+    // self.status.value == OPEN
+    // and Global.latest_timestamp >= self.join_deadline.value
+    // and self.entrant_count.value < self.min_entrants.value
+    bz cancel_bool_false@13
+    intc_1 // 1
+    bury 3
+
+cancel_bool_merge@14:
+    // smart_contracts/contest_escrow/contract.py:239
+    // timed_out = Global.latest_timestamp > self.settle_deadline.value
+    global LatestTimestamp
+    intc_0 // 0
+    bytec 11 // "settle_deadline"
+    app_global_get_ex
+    assert // check self.settle_deadline exists
+    >
+    bury 2
+    // smart_contracts/contest_escrow/contract.py:240
+    // assert privileged or short_field or timed_out, "cannot cancel yet"
+    bnz cancel_bool_true@17
+    dig 1
+    bnz cancel_bool_true@17
+    dup
+    bz cancel_bool_false@18
+
+cancel_bool_true@17:
+    intc_1 // 1
+
+cancel_bool_merge@19:
+    // smart_contracts/contest_escrow/contract.py:240
+    // assert privileged or short_field or timed_out, "cannot cancel yet"
+    assert // cannot cancel yet
+    // smart_contracts/contest_escrow/contract.py:241
+    // self.status.value = UInt64(CANCELED)
+    bytec_0 // "status"
+    pushint 4
+    app_global_put
+    // smart_contracts/contest_escrow/contract.py:225-226
+    // # ------------------------------------------------------------------ cancel
+    // @arc4.abimethod
+    intc_1 // 1
+    return
+
+cancel_bool_false@18:
+    intc_0 // 0
+    b cancel_bool_merge@19
+
+cancel_bool_false@13:
+    intc_0 // 0
+    bury 3
+    b cancel_bool_merge@14
+
+cancel_bool_false@8:
+    intc_0 // 0
+    b cancel_bool_merge@9
+
+cancel_bool_false@4:
+    intc_0 // 0
+    b cancel_bool_merge@5
+
+
+// smart_contracts.contest_escrow.contract.ContestEscrow.refund[routing]() -> void:
+refund:
+    // smart_contracts/contest_escrow/contract.py:243-244
+    // # ------------------------------------------------------------------ refund
+    // @arc4.abimethod
+    txna ApplicationArgs 1
+    dup
+    len
+    intc_3 // 32
+    ==
+    assert // invalid number of bytes for arc4.static_array<arc4.uint8, 32>
+    // smart_contracts/contest_escrow/contract.py:247
+    // assert self.status.value == CANCELED, "not canceled"
+    intc_0 // 0
+    bytec_0 // "status"
+    app_global_get_ex
+    assert // check self.status exists
+    pushint 4
+    ==
+    assert // not canceled
+    // smart_contracts/contest_escrow/contract.py:248
+    // assert entrant in self.entrants, "not an entrant"
+    bytec_3 // 0x65
+    dig 1
+    concat
+    dup
+    box_len
+    bury 1
+    assert // not an entrant
+    // smart_contracts/contest_escrow/contract.py:249
+    // assert self.entrants[entrant] == PAID_IN, "already refunded"
+    dup
+    box_get
+    pop
+    btoi
+    intc_1 // 1
+    ==
+    assert // already refunded
+    // smart_contracts/contest_escrow/contract.py:250
+    // self.entrants[entrant] = UInt64(REFUNDED)
+    pushint 2
+    itob
+    box_put
+    // smart_contracts/contest_escrow/contract.py:251
+    // self._send(entrant, self.entry_amount.value)
+    intc_0 // 0
+    bytec 6 // "entry_amount"
+    app_global_get_ex
+    assert // check self.entry_amount exists
+    callsub _send
+    // smart_contracts/contest_escrow/contract.py:243-244
+    // # ------------------------------------------------------------------ refund
+    // @arc4.abimethod
+    intc_1 // 1
+    return
+
+
+// smart_contracts.contest_escrow.contract.ContestEscrow.entrant_status[routing]() -> void:
+entrant_status:
+    // smart_contracts/contest_escrow/contract.py:264
+    // @arc4.abimethod(readonly=True)
+    txna ApplicationArgs 1
+    dup
+    len
+    intc_3 // 32
+    ==
+    assert // invalid number of bytes for arc4.static_array<arc4.uint8, 32>
+    // smart_contracts/contest_escrow/contract.py:266
+    // return self.entrants.get(entrant, default=UInt64(0))
+    bytec_3 // 0x65
+    swap
+    concat
+    box_get
+    swap
+    btoi
+    intc_0 // 0
+    swap
+    uncover 2
+    select
+    // smart_contracts/contest_escrow/contract.py:264
+    // @arc4.abimethod(readonly=True)
+    itob
+    bytec 22 // 0x151f7c75
+    swap
+    concat
+    log
+    intc_1 // 1
+    return
+
+
+// smart_contracts.contest_escrow.contract.ContestEscrow._send(receiver: bytes, amount: uint64) -> void:
+_send:
+    // smart_contracts/contest_escrow/contract.py:253-255
+    // # ------------------------------------------------------------------- reads
+    // @subroutine
+    // def _send(self, receiver: Account, amount: UInt64) -> None:
+    proto 2 0
+    // smart_contracts/contest_escrow/contract.py:256
+    // if amount > 0:
+    frame_dig -1
+    bz _send_after_if_else@3
+    // smart_contracts/contest_escrow/contract.py:257-262
+    // itxn.AssetTransfer(
+    //     xfer_asset=self.entry_asset.value,
+    //     asset_receiver=receiver,
+    //     asset_amount=amount,
+    //     fee=0,
+    // ).submit()
+    itxn_begin
+    // smart_contracts/contest_escrow/contract.py:258
+    // xfer_asset=self.entry_asset.value,
+    intc_0 // 0
+    bytec 5 // "entry_asset"
+    app_global_get_ex
+    assert // check self.entry_asset exists
+    frame_dig -1
+    itxn_field AssetAmount
+    frame_dig -2
+    itxn_field AssetReceiver
+    itxn_field XferAsset
+    // smart_contracts/contest_escrow/contract.py:257
+    // itxn.AssetTransfer(
+    pushint 4 // axfer
+    itxn_field TypeEnum
+    // smart_contracts/contest_escrow/contract.py:261
+    // fee=0,
+    intc_0 // 0
+    itxn_field Fee
+    // smart_contracts/contest_escrow/contract.py:257-262
+    // itxn.AssetTransfer(
+    //     xfer_asset=self.entry_asset.value,
+    //     asset_receiver=receiver,
+    //     asset_amount=amount,
+    //     fee=0,
+    // ).submit()
+    itxn_submit
+
+_send_after_if_else@3:
+    retsub

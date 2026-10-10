@@ -1,0 +1,7 @@
+# Local secret scanning: `gitleaks git .` (CI uses TruffleHog plus a file/mnemonic check).
+[extend]
+useDefault = true
+
+[allowlist]
+description = "ARC-56 app spec: global-state keys are base64 of field names (e.g. b3JnYW5pemVy = organizer), not secrets"
+paths = ['''contracts/smart_contracts/contest_escrow/artifacts/.*\.arc56\.json''']

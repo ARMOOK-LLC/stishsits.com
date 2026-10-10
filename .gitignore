@@ -5,3 +5,13 @@ node_modules/
 .algokit/
 __pycache__/
 .DS_Store
+.venv/
+*.pyc
+.pytest_cache/
+.ruff_cache/
+dist/
+coverage/
+.expo/
+*.log
+.env.*
+!.env.example
