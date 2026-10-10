@@ -4,7 +4,7 @@
 
 | Rule | Summary | Where enforced | Status |
 |---|---|---|---|
-| 2 | Race needs at least 2 paid sitters; otherwise entries return | `create` (min field ≥ 2), `lock`, `cancel` short-field path, `refund` | Built |
+| 2 | Race needs at least 2 paid sitters; otherwise entries are refunded | `create` (min field ≥ 2), `lock`, `cancel` short-field path, `refund` | Built |
 | 3 | Posted entry per division (Beginner 10, Intermediate 50, Open 100 SITS; Invite posted) | `create` fixes `entry_amount`; `join` checks exact amount | Built (division amounts not hard-coded) |
 | 4 | Division gates | — | TODO (Phase 5 registry) |
 | 5 | Silent before arming; Android checks ringer | app checklist | TODO |
@@ -17,7 +17,7 @@
 | 12 | No coin flip, no random draw | No randomness in winner selection | Built |
 | 13 | Posted promoter cut, default 10%; organizers do not pick the winner | `create` (bps, fixed), referee-only `settle` | Built |
 | 14 | Forfeited entries stay in the purse | purse = all entries minus posted cuts | Built |
-| 15 | No rollover; canceled race returns every entry | `cancel` + `refund` | Built |
+| 15 | No rollover; canceled race refunds every entry | `cancel` + `refund` | Built |
 | 16 | Winners may re-enter or leave | — | n/a |
 | 17 | No claims about SITS value | Docs and UI copy | Policy |
 

@@ -14,7 +14,7 @@ Local skill contests (cornhole, fishing, golf, lawnmower races, car shows) run o
 - **Escrowed entries.** Entries sit in the contest application, not with a person.
 - **Defined result authority.** The phone app for Stish Sits races; a staked human referee for other sports, with a bonded challenge window.
 - **Atomic settlement.** One transaction group pays winners, venue, promoter and referee, or nobody.
-- **Automatic refunds.** A short field or a canceled contest returns every entry.
+- **Automatic refunds.** A short field or a canceled contest refunds every entry.
 
 The flagship contest, also called **Stish Sits**, is a phone-flat sit-still contest: the app measures motion and sends random prompts; the last sitter still in, still answering, wins. The first planned real-purse event is a small cornhole tournament in Hochatown, Oklahoma, only after attorney sign-off.
 
@@ -30,12 +30,12 @@ Disclosures: the creator account holds about 98.8% of supply, and the manager, r
 
 | Path | Contents |
 |---|---|
-| [`docs/white-paper.md`](docs/white-paper.md) | White paper, draft v0.3 (also as [PDF](docs/StishSits-White-Paper.pdf)) |
-| [`ROADMAP.md`](ROADMAP.md) | Gated phases 0 to 9 |
+| [`docs/white-paper.md`](docs/white-paper.md) | White paper, draft v0.3.1 (also as [PDF](docs/StishSits-White-Paper.pdf)) |
+| [`ROADMAP.md`](ROADMAP.md) | Gated phases 0 to 8 (plus a future-research note) |
 | [`contracts/`](contracts/) | Contest escrow in Algorand Python (Puya): create, join, lock, settle, challenge, payout, cancel, refund; offline unit tests |
 | [`server/`](server/) | Node.js/TypeScript (Fastify) contest API, pulse timing, motion-log scoring, result signing, health checks |
 | [`app/`](app/) | React Native/Expo app: wallet placeholder, join, sit-still timer with accelerometer/gyroscope and tamper flags, results |
-| [`docs/`](docs/) | [Architecture](docs/architecture.md), [threat model](docs/threat-model.md), [contest rules spec](docs/contest-rules.md), [engineering roadmap](docs/roadmap.md) |
+| [`docs/`](docs/) | [Architecture](docs/architecture.md), [threat model](docs/threat-model.md), [contest rules spec](docs/contest-rules.md), [engineering roadmap](docs/roadmap.md), [grant and audit plan](docs/grant-and-audit-plan.md) |
 | [`.github/workflows/ci.yml`](.github/workflows/ci.yml) | Lint, typecheck, tests, TEAL compile check, secret scan |
 | [`CONTRIBUTING.md`](CONTRIBUTING.md), [`CODE_OF_CONDUCT.md`](CODE_OF_CONDUCT.md), [`SECURITY.md`](SECURITY.md) | How to help, how to behave, how to report a vulnerability |
 | [`LICENSE`](LICENSE) | All rights reserved, license TBD |

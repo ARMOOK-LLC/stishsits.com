@@ -2,7 +2,7 @@
 
 **Transparent, skill-based contests settled on Algorand**
 
-White paper draft v0.3 | October 2026 | Eric Binkley | stishsits.com
+White paper draft v0.3.1 (wording revision) | October 2026 | Eric Binkley | stishsits.com
 
 > **Status of this document.** This is a working draft for discussion, including with Algorand Foundation. Items marked **[Unconfirmed]** are design intentions or open questions, not commitments. Nothing here is legal, tax or investment advice. No legal review has been completed yet; see Section 14.
 
@@ -30,7 +30,7 @@ Anyone who has entered a local tournament knows the questions:
 - Who decided the winner, and did that person have a stake in the outcome?
 - If a result was wrong, who do you appeal to?
 
-Most local events handle money with cash boxes, payment apps and spreadsheets. Even honest organizers cannot easily prove their numbers. Dishonest ones can skim, change the payout split after the fact, or quietly favor a friend. The result is that good events struggle to earn trust, entrants hold back, and many contests never grow past a small circle.
+Most local events handle money with cash boxes, payment apps and spreadsheets. Even honest organizers cannot easily prove their numbers. Dishonest ones can skim, change the payout split after the fact, or quietly favor a friend. The result is that good events struggle to win trust, entrants hold back, and many contests never grow past a small circle.
 
 The organizer is also usually the judge, the treasurer and the promoter at the same time. That concentration is the core weakness: one person controls the money and the result.
 
@@ -45,7 +45,7 @@ Stish Sits separates the money from the people.
 3. **Defined result authority.** Each contest names who reports the result: the phone app's referee key for Stish Sits, or a staked human referee or scorekeeper for other sports.
 4. **Challenge window.** Results can be challenged by entrants who post a small bond. Referees who report wrong results lose their stake. A simple version runs in the Phase 4 cornhole pilot; the full design follows in later phases. See Section 7.
 5. **Atomic settlement.** When the result is final, one atomic group pays the winners, the venue, the promoter and the referee. Every transfer is public and linked from the result screen.
-6. **Automatic refunds.** If a contest does not fill or is canceled, every entry returns.
+6. **Automatic refunds.** If a contest does not fill or is canceled, every entry is refunded.
 
 This is a skill contest model, the same idea as entry fees at a fishing tournament or a race car event: competitors pay to enter, and the best performance wins the purse. It is not a wager on an outcome the entrant does not control. Whether a given contest qualifies as a lawful skill contest in a given state is a legal question we have not yet answered; see Section 14.
 
@@ -72,7 +72,7 @@ It is deliberately simple: no camera judging, no human judge, no equipment beyon
 These are the rules every sitter agrees to, as drafted.
 
 1. Phones flat. Everyone knows the rules.
-2. A race starts only with at least two paid sitters. One sitter, no race. Entries return.
+2. A race starts only with at least two paid sitters. One sitter, no race. Entries are refunded.
 3. Entry is a posted amount of SITS for that division. Beginner 10. Intermediate 50. Open 100. Invite fee is posted before that race.
 4. Intermediate requires 100 beginner entries and 1 beginner win. Open requires 25 intermediate entries and 1 intermediate win. Invite is season standings only.
 5. Before the clock arms, the phone must be on silent with vibration off. Airplane mode is the standard. The app will not arm if it can tell the ringer is not silent.
@@ -84,8 +84,8 @@ These are the rules every sitter agrees to, as drafted.
 11. If two or more are still in when the clock ends, they go to sudden death. Pulses every 15 seconds. A single letter. Tighter motion line. Last miss loses. If two miss the same pulse, the faster clean answer on the prior pulse wins.
 12. No coin flip. No random draw. A race that starts always ends with a winner.
 13. The promoter's cut is posted before entry. Default 10 percent of entries. It pays the organizer who filled the field. It is not a judge's fee. Organizers do not decide the winner.
-14. Forfeited entries return to the purse, not to the promoter.
-15. The purse does not roll because nobody survived. It grows only because more people entered. A canceled race returns every entry.
+14. Forfeited entries stay in the purse, not with the promoter.
+15. The purse does not roll because nobody survived. It grows only because more people entered. A canceled race refunds every entry.
 16. Winners may enter again or leave. Cashing out is allowed.
 17. No claim that SITS will rise. No claim that a purse pays anyone's bills. The purse is the prize shown on chain before the sit.
 
@@ -182,19 +182,19 @@ The Stish Sits phone contest stays the flagship app-refereed format. The cornhol
 
 ## 6. Roles and incentives
 
-| Role | What they do | What they put up | What they earn | Key constraint |
+| Role | What they do | What they put up | What they receive | Key constraint |
 |---|---|---|---|---|
-| Competitor | Enters and competes | Entry | A share of the purse if they place | Plays by the posted rules |
-| Referee / scorekeeper | Reports results | Stake in SITS | Posted referee fee | May never enter or bet on a contest they officiate |
-| Promoter | Fills the field | Stake in SITS **[later phases]** | Posted promoter cut, can scale with turnout | Does not decide the winner |
-| Venue | Hosts the event | Real-world space and costs | Posted venue cut | Discloses off-chain costs up front |
+| Competitor | Enters and competes | Entry | A prize from the purse if they place | Plays by the posted rules |
+| Referee / scorekeeper | Reports results | Stake in SITS | The posted referee fee | May never enter, or share in, a contest they officiate |
+| Promoter | Fills the field | Stake in SITS **[later phases]** | The promoter fee set in the contest rules, which can scale with turnout | Does not decide the winner |
+| Venue | Hosts the event | Real-world space and costs | The venue fee set in the contest rules | Discloses off-chain costs up front |
 | Organizer | Creates the contest in the builder | Time, setup | May be the promoter, or may hire one | Terms lock at publish |
 
 **Competitors** get transparency: they can see the purse grow, see every cut, and see their payout land.
 
-**Referees** stake SITS and lose it if they cheat or report wrong results. Their reputation is built from an on-chain record of contests officiated and disputes lost. Referees can never enter, bet on, or share in the purse of a contest they officiate, because referee and competitor collusion is the main scam the system must guard against.
+**Referees** stake SITS and lose it if they cheat or report wrong results. Their reputation is built from an on-chain record of contests officiated and disputes lost. Referees can never enter, or share in the purse of, a contest they officiate, because referee and competitor collusion is the main scam the system must guard against.
 
-**Promoters** browse open contests and see who signed up, the purse size, the venue and the competition. They can offer to promote a contest for a share of the purse. They stake SITS to show skin in the game, build a credibility record (contests promoted, turnout, completion rate, disputes), and earn on a sliding scale based on turnout. An illustrative scale: 5% of entries under 10 entrants, 8% for 10 to 19, 10% for 20 or more. **[Scale TBD]**
+**Promoters** browse open contests and see who signed up, the purse size, the venue and the competition. They can offer to promote a contest for the promoter fee set in its rules. They stake SITS to show skin in the game, build a credibility record (contests promoted, turnout, completion rate, disputes), and receive the posted promoter fee, which may follow a sliding scale based on turnout. An illustrative scale: 5% of entries under 10 entrants, 8% for 10 to 19, 10% for 20 or more. **[Scale TBD]**
 
 **Venues** set their cut and disclose real-world costs off chain, such as green fees or golf carts. Some venues are free, like a public fishing spot.
 
@@ -278,8 +278,8 @@ Clawback and freeze are both enabled. That gives the issuer the technical abilit
 | Forfeit | Referee key, or the entrant | Marks a forfeit. The entry stays in the purse |
 | Post result | Referee key | Records winner(s) and starts the challenge window |
 | Challenge | Entrant with bond | Records a dispute; pauses settlement once the threshold is met |
-| Settle | Anyone, after the window | Pays winners, venue, promoter and referee as inner transactions in one atomic group; returns stakes |
-| Cancel | Anyone, if the field is short at start time | Returns every entry and stake |
+| Settle | Anyone, after the window | Pays winners, venue, promoter and referee as inner transactions in one atomic group; releases stakes |
+| Cancel | Anyone, if the field is short at start time | Refunds every entry and releases every stake |
 
 ### 8.5 Atomic group settlement
 
@@ -324,7 +324,7 @@ This is the guide printed at the table and posted on the site. Menu labels in Pe
 
 ### 9.4 Fees are tiny
 
-Algorand fees are a small fraction of a cent at typical ALGO prices. The minimum transaction fee is 0.001 ALGO. Beyond fees, every Algorand account must keep a small minimum balance: 0.1 ALGO for the account itself plus 0.1 ALGO for each asset it opts into. So a new player needs roughly 0.2 ALGO held in the account plus a few thousandths of an ALGO for the opt-in and entry fees. The minimum balance is not spent; it stays in the player's account. Contract settlement fees are covered by the contest application.
+Algorand network fees are very small: the minimum transaction fee is 0.001 ALGO. Beyond fees, every Algorand account must keep a small minimum balance: 0.1 ALGO for the account itself plus 0.1 ALGO for each asset it opts into. So a new player needs roughly 0.2 ALGO held in the account plus a few thousandths of an ALGO for the opt-in and entry fees. The minimum balance is not spent; it stays in the player's account. Contract settlement fees are covered by the contest application.
 
 ### 9.5 Selling SITS at events: needs attorney review
 
@@ -370,7 +370,7 @@ What SITS is not:
 - It is not offered as an investment, and no one should acquire it expecting a profit.
 - We make no claim that SITS will rise in value.
 - We make no claim that a purse pays anyone's bills.
-- Staking is a performance bond for doing a job (refereeing, promoting). It is not designed as a passive yield product. Referees earn the posted fee for work done, not interest on their stake.
+- Staking is a performance bond for doing a job (refereeing, promoting). It is not designed as a passive yield product. Referees receive the posted fee for work done, not interest on their stake.
 
 The purse is the prize shown on chain before the contest. That is the whole promise.
 
@@ -384,7 +384,7 @@ We have nothing to hide, so here is the full history of the token, including the
 
 ### 12.1 Origin and first use
 
-Eric Binkley created SITS on Algorand in February 2021 (creation round 12,013,291) and holds the creator account today. Its first use was as a rewards token on a social media website run by Eric's team. Users earned SITS for liking and commenting on posts, and could spend SITS to promote or boost their own content. Some users bought SITS to pay for boosting.
+Eric Binkley created SITS on Algorand in February 2021 (creation round 12,013,291) and holds the creator account today. Its first use was as a rewards token on a social media website run by Eric's team. Users received SITS for liking and commenting on posts, and could spend SITS to promote or boost their own content. Some users bought SITS to pay for boosting.
 
 SITS was also sold directly for cash through a card payment flow. Stripe, the payment processor, shut that down, and direct cash sales stopped.
 
@@ -404,9 +404,9 @@ Algorand's user base and very low fees make this a good time to give SITS a genu
 
 Stish Sits also happens to be a palindrome. It reads the same backward, which seems right for a contest about staying put.
 
-### 12.4 Planned liquidity commitment
+### 12.4 Issuer liquidity (discretionary, nothing promised)
 
-Eric plans to provide some liquidity to a SITS market on an Algorand exchange as a sign of commitment to the project. The amount, the exchange and any lockup terms are not yet set. **[Amount and venue TBD]** This liquidity carries no promise about price, and it is not a guarantee that anyone can buy or sell at any particular level. Any issuer-provided liquidity, and the creator account's holdings, will be disclosed publicly. How issuer liquidity may be viewed legally is an open question for counsel (Section 14.3).
+ARMOOK may provide liquidity for SITS at its discretion. No price, value or market is promised, and no one should expect that they will be able to acquire or dispose of SITS at any particular level, or at all. ARMOOK does not intend to support the price of SITS or to act as a market maker. No amount, venue or terms have been set, and nothing will be done before counsel has reviewed it (Section 14.3). Any issuer-provided liquidity, and the creator account's holdings, will be disclosed publicly.
 
 ---
 
@@ -421,7 +421,7 @@ The default promoter cut is 10 percent of entries (rule 13). Forfeited entries s
 | Beginner | 10 SITS | 10 | 100 SITS | 10 SITS | 90 SITS |
 | Intermediate | 50 SITS | 10 | 500 SITS | 50 SITS | 450 SITS |
 | Open | 100 SITS | 10 | 1,000 SITS | 100 SITS | 900 SITS |
-| Any | Any | 1 | n/a | 0 | No race; entry returns (rule 2) |
+| Any | Any | 1 | n/a | 0 | No race; entry refunded (rule 2) |
 
 Sitter counts above are illustrative. Invite entries are posted before each Invite race.
 
@@ -459,7 +459,7 @@ No attorney has reviewed this design yet. The items below are risks we have iden
 - **Issuer controls.** Clawback and freeze are enabled and must be disclosed and governed.
 - **Prior cash sales.** SITS was previously sold directly for cash until Stripe shut that down. Counsel needs to review how those past sales affect the token's status today and what disclosure they require.
 - **Boost purchases.** Some users bought SITS to boost content on the earlier social site. Counsel should review whether those purchases, which were for a use inside a product, change the analysis.
-- **Issuer liquidity.** Liquidity provided by the issuer may be viewed as market making or price support. Counsel should advise on structure, disclosure and any lockup before liquidity is added.
+- **Issuer liquidity.** Any liquidity provided by the issuer could be viewed as market making or price support. ARMOOK does not intend either. Counsel should advise on structure and disclosure before any liquidity is provided.
 - **Creator holdings disclosure.** The creator account holds about 98.8% of supply. We plan to disclose these holdings and any changes to them publicly; counsel should advise on the form and frequency.
 
 ### 14.4 Other items for review
@@ -471,7 +471,7 @@ No attorney has reviewed this design yet. The items below are risks we have iden
 - Venue and promoter agreements, and liability for in-person events
 - Selling SITS, or buying it back, for cash or card at events (Section 9.5)
 - Collegiate events: age limits (some players will be under 18 or under 21), state rules for minors in paid-entry contests, and each campus's own rules on paid events, prizes and digital assets
-- Spectator prediction markets (final phase): wagers by non-participants are regulated as gambling under state gaming law, or as event contracts under CFTC jurisdiction. This needs its own legal structure and must never be mixed with contest purses
+- Spectator features (future research only; not planned): any feature that involved money from non-participants would raise state gaming-law and CFTC questions, would need its own legal structure, and must never be mixed with contest purses
 
 ### 14.5 Entity
 
@@ -493,17 +493,16 @@ The roadmap follows the draft's build order, with Eric's cornhole pilot as the f
 | 5 | Organizer cut, division gates, season board | Gates enforced on chain |
 | 6 | Contest builder, staked referees, bonded challenges | Multiple organizers run contests without hand-holding |
 | 7 | Promoter marketplace and venues | Promoters and venues transacting on the platform |
-| 8 | Collegiate expansion: students organize events and work as referees; colleges earn venue fees | Campus approval and age rules confirmed for each school |
-| 9 | Spectator prediction markets, only with a real active user base, under a separate legal structure | Separate licensing or registration in place; no link to contest purses |
+| 8 | Collegiate expansion: students organize events and work as referees; colleges host as venues and receive the venue fee set in the contest rules | Campus approval and age rules confirmed for each school |
 
 **Go-to-market.** Traffic is the real challenge for any marketplace, and Eric has built marketplaces before from his classifieds days. The plan is to prove it locally first in Hochatown and Broken Bow, Oklahoma: small events of 10 to 20 people with real payouts, then a regular schedule, then nearby towns. Algorand Foundation may help promote the project; nothing has been agreed. **[Unconfirmed]** The long-term goal is an annual Stish Sits event in Hochatown.
 
-**Collegiate expansion (Phase 8).** Colleges are a natural fit for the platform's roles. Students can organize events and work as staked referees and scorekeepers, and colleges can earn venue fees for hosting. Two cautions: many students are under 21 and some are under 18, so age limits must follow state law and counsel's advice; and every campus has its own rules on paid events, prizes and digital assets, which must be cleared with the school first. **[No school has been approached]**
+**Collegiate expansion (Phase 8).** Colleges are a natural fit for the platform's roles. Students can organize events and work as staked referees and scorekeepers, and colleges can host and receive the venue fee set in the contest rules. Two cautions: many students are under 21 and some are under 18, so age limits must follow state law and counsel's advice; and every campus has its own rules on paid events, prizes and digital assets, which must be cleared with the school first. **[No school has been approached]**
 
-**Spectator prediction markets (Phase 9, final phase).** Once there is a real, active user base, spectators may want to predict outcomes. This is a different activity from a skill contest. A competitor pays to enter and controls their own performance; a spectator who bets on someone else's result is wagering. Bets from non-participants are regulated as gambling under state gaming law, or as event contracts under the Commodity Futures Trading Commission (CFTC). This phase would need its own legal structure, likely its own entity and licensing, and it would never touch contest purses: separate contracts, separate funds, and no way for spectator money to flow into or out of a purse. Competitors and referees would not be allowed to bet on their own contests. **[Not planned before an active user base exists; subject to legal review]**
+**Future research (not planned; only if lawful and approved by counsel): spectator features.** This is not part of the roadmap above and may never happen. Stish Sits is a skill contest: competitors pay to enter and control their own performance. Any feature for spectators who are not competing would be a different activity with different legal rules, would be considered only if counsel confirms it is lawful, would need its own legal structure, and would never touch contest purses. Competitors and referees would never be allowed to take a position on their own contests.
 
 ---
 
 ## 16. Disclaimer
 
-This white paper is a draft for discussion. It describes a product that is not yet built, and the design may change. It is not an offer to sell, or a solicitation of an offer to buy, SITS or any other asset, and it is not legal, tax, financial or investment advice. SITS is intended as an entry chip and performance stake inside the Stish Sits platform. No one should acquire SITS expecting profit, and any planned issuer liquidity is not a promise about price or about anyone's ability to trade at any level, and we make no claim that SITS will rise in value or that any purse will pay anyone's bills. Paid-entry contests may not be lawful in every jurisdiction; Stish Sits will operate real-purse contests only where counsel advises it is permitted. The SITS asset has clawback and freeze enabled, controlled by the creator account. On-chain data cited here is a snapshot from October 9, 2026, and may change. No partnership with Algorand Foundation, any college, or any venue is implied. Spectator prediction markets are not offered and would only be considered later under a separate legal structure.
+This white paper is a draft for discussion. It describes a product that is not yet built, and the design may change. It is not an offer to sell, or a solicitation of an offer to buy, SITS or any other asset, and it is not legal, tax, financial or investment advice. SITS is intended as an entry chip and performance stake inside the Stish Sits platform. No one should acquire SITS expecting profit, any issuer-provided liquidity is discretionary and is not a promise of any price, value or market, and we make no claim that SITS will rise in value or that any purse will pay anyone's bills. Paid-entry contests may not be lawful in every jurisdiction; Stish Sits will operate real-purse contests only where counsel advises it is permitted. The SITS asset has clawback and freeze enabled, controlled by the creator account. On-chain data cited here is a snapshot from October 9, 2026, and may change. No partnership with Algorand Foundation, any college, or any venue is implied. No spectator features are offered or planned; any would be considered only if lawful and approved by counsel, under a separate legal structure.

@@ -12,9 +12,12 @@ No dates are committed. Each phase has a gate that must be met before the next b
 | 5 | Organizer cut, division gates, season board, contest factory | 3 to 4 weeks | Gates enforced on chain |
 | 6 | Contest builder, staked referees, bonded challenges, professional audit | 8 to 12 weeks | Outside organizers run contests unaided |
 | 7 | Promoter marketplace and venues | 8 to 12 weeks | Contests running beyond Hochatown and Broken Bow |
-| 8 | College league (students organize and referee; colleges host) | 6 to 10 weeks plus campus approvals | Campus approval and age rules confirmed per school |
-| 9 | Spectator prediction markets, **final and separate**: only with a real active user base, under a separate legal structure and licensing, fully walled off from contest purses | Not estimated | Separate entity and licensing in place first |
+| 8 | College league (students organize and referee; colleges host as venues and receive the venue fee set in the contest rules) | 6 to 10 weeks plus campus approvals | Campus approval and age rules confirmed per school |
 
-Phase 9 may never happen. Competitors, referees, promoters and venues would never be allowed to take positions on their own contests.
+Before any MainNet use, the testing milestones, independent audit and attorney clearance in [docs/grant-and-audit-plan.md](docs/grant-and-audit-plan.md) must be complete.
 
 Current phase: **0 and 1** (legal review in progress; landing site being prepared).
+
+## Future research (not planned; only if lawful and approved by counsel)
+
+- **Spectator features.** Not part of the committed roadmap and may never happen. Anything of this kind would be considered only if counsel confirms it is lawful, would need its own legal structure, and would never touch contest purses. Competitors and referees would never be allowed to take a position on their own contests.
