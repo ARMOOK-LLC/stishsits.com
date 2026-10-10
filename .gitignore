@@ -1,0 +1,7 @@
+.env
+*.key
+*.mnemonic
+node_modules/
+.algokit/
+__pycache__/
+.DS_Store
